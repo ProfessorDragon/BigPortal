@@ -130,6 +130,9 @@ class $modify(MyGJBaseGameLayer, GJBaseGameLayer)
         std::string quality;
         switch (CCDirector::get()->getLoadedTextureQuality())
         {
+        case kTextureQualityLow:
+            quality = "";
+            break;
         case kTextureQualityMedium:
             quality = "-hd";
             break;
