@@ -1,3 +1,5 @@
-# Template Mod
+# Big Portal
 
-Edit about.md to change this
+Like the mini portal, but big.
+
+Available in the level editor, in the rings tab, next to the mini portal.

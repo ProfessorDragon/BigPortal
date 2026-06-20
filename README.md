@@ -1,13 +1,16 @@
 # BigPortal
+
 This is where she makes a mod.
 
-<img src="logo.png" width="150" alt="the mod's logo" />
+<img src="logo.png" width="150" alt="logo" />
 
-*Update logo.png to change your mod's icon (please)*
 
 ## Usage
 
--
+Install the mod with [Geode](https://geode-sdk.org/mods/profdragon.bigportal) or build it manually.
+
+See [about.md](about.md) for instructions on using it.
+
 
 ## Special thanks
 
