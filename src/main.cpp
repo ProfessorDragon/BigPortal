@@ -4,23 +4,23 @@ using namespace geode::prelude;
 
 $execute
 {
-	CCSpriteFrameCache::sharedSpriteFrameCache()
-		->addSpriteFramesWithFile("BigPortalSheet.plist"_spr);
+    CCSpriteFrameCache::sharedSpriteFrameCache()
+        ->addSpriteFramesWithFile("BigPortalSheet.plist"_spr);
 }
 
 $on_game(Loaded)
 {
-	auto levelManager = LocalLevelManager::get();
-	if (!levelManager)
-	{
-		log::error("Failed to get LocalLevelManager instance.");
-		return;
-	}
+    auto levelManager = LocalLevelManager::get();
+    if (!levelManager)
+    {
+        log::error("Failed to get LocalLevelManager instance.");
+        return;
+    }
 
-	if (levelManager->m_localLevels)
-	{
-		auto level = static_cast<GJGameLevel *>(levelManager->m_localLevels->objectAtIndex(0));
-		auto scene = LevelEditorLayer::scene(level, false);
-		CCDirector::sharedDirector()->pushScene(scene);
-	}
+    if (levelManager->m_localLevels)
+    {
+        auto level = static_cast<GJGameLevel *>(levelManager->m_localLevels->objectAtIndex(0));
+        auto scene = LevelEditorLayer::scene(level, false);
+        CCDirector::sharedDirector()->pushScene(scene);
+    }
 };
