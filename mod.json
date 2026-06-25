@@ -8,9 +8,9 @@
 	},
 	"id": "profdragon.bigportal",
 	"name": "Big Portal",
-	"version": "v1.0.0",
+	"version": "v0.1.0",
 	"developer": "ProfDragon",
-	"description": "",
+	"description": "Like the mini portal, but big",
 	"dependencies": {
 		"geode.node-ids": ">=v1.23.3"
 	},
@@ -20,5 +20,10 @@
 				"resources/*.png"
 			]
 		}
-	}
+	},
+	"tags": [
+		"content",
+		"editor",
+		"offline"
+	]
 }

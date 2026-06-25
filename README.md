@@ -1,6 +1,6 @@
 # BigPortal
 
-This is where she makes a mod.
+Like the mini portal, but big. A Geometry Dash mod.
 
 <img src="logo.png" width="150" alt="logo" />
 
