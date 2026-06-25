@@ -2,7 +2,7 @@
 
 using namespace geode::prelude;
 
-$execute
+$on_mod(Loaded)
 {
     CCSpriteFrameCache::sharedSpriteFrameCache()
         ->addSpriteFramesWithFile("BigPortalSheet.plist"_spr);

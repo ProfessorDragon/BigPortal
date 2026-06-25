@@ -60,10 +60,10 @@ class $modify(MyPlayerObject, PlayerObject)
         {
             if (m_isShip)
                 // CHANGED - ship red pad velocity
-                newVelocity *= .85f;
+                newVelocity *= .8f;
             else if (m_isBird)
                 // CHANGED - ufo red pad velocity
-                newVelocity *= .8f;
+                newVelocity *= .78f;
         }
 
         PlayerObject::propellPlayer(newVelocity, noEffects, objectTypeInt);
@@ -159,7 +159,7 @@ class $modify(MyPlayerObject, PlayerObject)
 
             // CHANGED - ring velocity
             // float sizeScale = m_vehicleSize == 1.f ? 1.f : .8f;
-            const float sizeScale = 1.1f;
+            const float sizeScale = 1.2f;
 
             // uhh why is it called yStart lmao
             float jumpVel = m_yStart;
@@ -190,11 +190,11 @@ class $modify(MyPlayerObject, PlayerObject)
                 if (m_isShip)
                     // CHANGED - ship red ring velocity
                     // jumpVel *= m_vehicleSize == 1.f ? 1.f : 1.4f;
-                    jumpVel *= .7f;
+                    jumpVel *= .75f;
                 else if (m_isBird)
                     // CHANGED - ufo red ring velocity
                     // jumpVel *= m_vehicleSize == 1.f ? 1.02f : 1.36f;
-                    jumpVel *= .65f;
+                    jumpVel *= .79f;
                 else if (m_isBall)
                     jumpVel *= 1.34f;
                 else if (m_isRobot)
@@ -352,8 +352,6 @@ class $modify(MyPlayerObject, PlayerObject)
 
     void updateJump(float dt)
     {
-        log::debug("BigPortal 3");
-
         if (!isBig())
         {
             PlayerObject::updateJump(dt);
@@ -425,7 +423,7 @@ class $modify(MyPlayerObject, PlayerObject)
 
                 // CHANGED - swing velocity
                 // float swingAccel = m_vehicleSize == 1.f ? .4f : .6f;
-                const float swingAccel = .3f;
+                const float swingAccel = .35f;
                 float velocityDelta = sign * dt * gravity * swingAccel;
                 setYVelocity(m_yVelocity - velocityDelta, 0);
             }
@@ -439,7 +437,7 @@ class $modify(MyPlayerObject, PlayerObject)
 
                     // CHANGED - ufo jump velocity
                     // double targetVel = (m_vehicleSize == 1.f ? 7.f : 8.f) * flightSizeScale * sign;
-                    double targetVel = 6.f * flightSizeScale * sign;
+                    double targetVel = 6.5f * flightSizeScale * sign;
 
                     // multiplying by sign is getting confusing
                     if (m_yVelocity * sign < targetVel * sign)
