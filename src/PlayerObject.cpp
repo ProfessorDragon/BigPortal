@@ -357,9 +357,18 @@ class $modify(MyPlayerObject, PlayerObject)
         // wave velocity
         if (isBig() && m_isDart && !m_isDashing && !m_isLocked)
         {
-            // TODO
-            // m_yVelocityRelated3 *= .5f;
-            // setYVelocity(m_yVelocity * .5f, 0);
+            CCPoint pos = getPosition();
+
+            // i see why we can't have wave in platformer 😔
+            const double speed = m_playerSpeed * m_speedMultiplier;
+            const int sign = (m_isUpsideDown ? -1 : 1) * (m_jumpBuffered ? 1 : -1);
+
+            // CHANGED wave velocity
+            // 0x = same as mini wave
+            // 1x = same as normal wave
+            pos.y -= 1.25f * abs(speed) * dt * sign;
+
+            setPosition(pos);
         }
     }
 
