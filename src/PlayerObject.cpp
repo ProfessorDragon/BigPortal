@@ -158,7 +158,7 @@ class $modify(MyPlayerObject, PlayerObject)
             m_isOnGround = false;
 
             // CHANGED - ring velocity
-            // float sizeScale = m_vehicleSize == 1.f ? 1.f : .8f;
+            // const float sizeScale = m_vehicleSize == 1.f ? 1.f : .8f;
             const float sizeScale = 1.2f;
 
             // uhh why is it called yStart lmao
@@ -350,6 +350,19 @@ class $modify(MyPlayerObject, PlayerObject)
         PlayerObject::togglePlayerScale(enable, noEffects);
     }
 
+    void update(float dt)
+    {
+        PlayerObject::update(dt);
+
+        // wave velocity
+        if (isBig() && m_isDart && !m_isDashing && !m_isLocked)
+        {
+            // TODO
+            // m_yVelocityRelated3 *= .5f;
+            // setYVelocity(m_yVelocity * .5f, 0);
+        }
+    }
+
     void updateJump(float dt)
     {
         if (!isBig())
@@ -378,7 +391,7 @@ class $modify(MyPlayerObject, PlayerObject)
         float gravity = m_gravityMod * (m_isBall || m_isShip || m_isBird || m_isDart || m_isSwing || m_isSpider ? .958199f : m_gravity);
 
         // CHANGED - jump velocity
-        // float sizeScale = m_vehicleSize == 1.f ? 1.f : .8f;
+        // const float sizeScale = m_vehicleSize == 1.f ? 1.f : .8f;
         const float sizeScale = 1.2f;
 
         int sign = m_isUpsideDown ? -1 : 1;
@@ -387,8 +400,8 @@ class $modify(MyPlayerObject, PlayerObject)
         if (m_isShip || m_isBird || m_isDart || m_isSwing)
         {
             // CHANGED - flying velocity
-            // float flightSizeScale = m_vehicleSize == 1.f ? sizeScale : .85f;
-            float flightSizeScale = 1.15f;
+            // const float flightSizeScale = m_vehicleSize == 1.f ? sizeScale : .85f;
+            const float flightSizeScale = 1.15f;
 
             if (
                 // lower limit
@@ -422,10 +435,9 @@ class $modify(MyPlayerObject, PlayerObject)
                 }
 
                 // CHANGED - swing velocity
-                // float swingAccel = m_vehicleSize == 1.f ? .4f : .6f;
+                // const float swingAccel = m_vehicleSize == 1.f ? .4f : .6f;
                 const float swingAccel = .35f;
-                float velocityDelta = sign * dt * gravity * swingAccel;
-                setYVelocity(m_yVelocity - velocityDelta, 0);
+                setYVelocity(m_yVelocity - sign * dt * gravity * swingAccel, 0);
             }
 
             // ufo
@@ -436,8 +448,8 @@ class $modify(MyPlayerObject, PlayerObject)
                     m_stateRingJump = false;
 
                     // CHANGED - ufo jump velocity
-                    // double targetVel = (m_vehicleSize == 1.f ? 7.f : 8.f) * flightSizeScale * sign;
-                    double targetVel = 6.5f * flightSizeScale * sign;
+                    // const double targetVel = (m_vehicleSize == 1.f ? 7.f : 8.f) * flightSizeScale * sign;
+                    const double targetVel = 6.5f * flightSizeScale * sign;
 
                     // multiplying by sign is getting confusing
                     if (m_yVelocity * sign < targetVel * sign)
@@ -473,9 +485,7 @@ class $modify(MyPlayerObject, PlayerObject)
                 }
 
                 // gravity
-                float flapBoost = playerIsFallingBugged() ? 1.f : 1.2f;
-                float velDelta = sign * dt * gravity * flapBoost * .5f / flightSizeScale;
-                setYVelocity(m_yVelocity - velDelta, 0);
+                setYVelocity(m_yVelocity - sign * dt * gravity * (playerIsFallingBugged() ? 1.f : 1.2f) * .5f / flightSizeScale, 0);
             }
 
             // ship
@@ -486,7 +496,6 @@ class $modify(MyPlayerObject, PlayerObject)
                 {
                     if (!m_isAccelerating || m_yVelocity * sign < 0)
                         gravityDir = -1.f;
-                    m_isOnGround2 = false;
                 }
                 else if (!playerIsFallingBugged())
                     gravityDir = 1.2f;
@@ -495,11 +504,11 @@ class $modify(MyPlayerObject, PlayerObject)
                 float platformerScale = m_isPlatformer ? .8f : 1.f;
                 float effectiveGravity = gravity * platformerScale;
 
-                float velDelta = sign * dt * effectiveGravity * gravityDir * accelMult / flightSizeScale;
-                setYVelocity(m_yVelocity - velDelta, 0);
+                setYVelocity(m_yVelocity - sign * dt * effectiveGravity * gravityDir * accelMult / flightSizeScale, 0);
 
                 if (m_gameLayer && m_wasJumpBuffered != m_jumpBuffered)
-                    m_gameLayer->gameEventTriggered(m_jumpBuffered ? GJGameEvent::ShipBoostStart : GJGameEvent::ShipBoostEnd, 0, m_uniqueID);
+                    m_gameLayer->gameEventTriggered(
+                        m_jumpBuffered ? GJGameEvent::ShipBoostStart : GJGameEvent::ShipBoostEnd, 0, m_uniqueID);
             }
 
             // velocity clamp
@@ -511,6 +520,10 @@ class $modify(MyPlayerObject, PlayerObject)
                 else
                     setYVelocity(std::clamp(m_yVelocity, -cap, .8 * cap), 0);
             }
+
+            // ground particle related
+            if (m_jumpBuffered)
+                m_isOnGround2 = false;
 
             if (playerIsFallingBugged())
                 m_maybeIsBoosted = false;
