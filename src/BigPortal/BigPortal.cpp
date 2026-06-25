@@ -65,6 +65,41 @@ bool BigPortal::init()
     return true;
 }
 
+void BigPortal::setPlayerSize(PlayerObject *player, float s)
+{
+    player->m_vehicleSize = s;
+    player->m_spriteWidthScale = s;
+    player->m_spriteHeightScale = s;
+
+    // see PlayerObject::togglePlayerScale
+    player->m_landParticles0->loadScaledDefaults(s);
+    player->m_landParticles1->loadScaledDefaults(s);
+    player->m_playerGroundParticles->loadScaledDefaults(s);
+    player->m_vehicleGroundParticles->loadScaledDefaults(s);
+    player->m_trailingParticles->loadScaledDefaults(s);
+    player->m_shipClickParticles->loadScaledDefaults(s);
+    player->m_ufoClickParticles->loadScaledDefaults(s);
+    player->m_robotBurstParticles->loadScaledDefaults(s);
+    player->m_dashParticles->loadScaledDefaults(s);
+    player->m_swingBurstParticles1->loadScaledDefaults(s);
+    player->m_swingBurstParticles2->loadScaledDefaults(s);
+    player->m_regularTrail->setStroke(player->m_streakStrokeWidth * s * (player->m_isDart ? .8f : 1.f));
+    if (player->m_playEffects || player->m_isDart)
+        player->m_waveTrail->m_waveSize = s;
+    if (player->m_ghostTrail)
+        player->m_ghostTrail->m_playerScale = s;
+    if (player->m_isBall && player->m_isRotating && !player->m_isLocked && !player->m_isDashing)
+    {
+        player->m_isRotating = false;
+        player->m_isBallRotating2 = false;
+        player->m_isBallRotating = false;
+        player->m_rotationSpeed = 0.0;
+        player->runBallRotation(1.0); // LATER contains m_vehicleSize
+    }
+    player->placeStreakPoint();
+    player->updateRobotAnimationSpeed(); // LATER contains m_vehicleSize
+}
+
 void BigPortal::customSetup()
 {
     EffectGameObject::customSetup();
@@ -149,42 +184,10 @@ void BigPortal::triggerObject(GJBaseGameLayer *layer, int uniqueID, gd::vector<i
 
     playShineEffect();
 
-    const float s = PLAYER_SIZE;
-
-    if (player->m_vehicleSize == s)
+    if (player->m_vehicleSize == PLAYER_SIZE)
         return;
 
-    player->m_vehicleSize = s;
-    player->m_spriteWidthScale = s;
-    player->m_spriteHeightScale = s;
-
-    // see PlayerObject::togglePlayerScale
-    player->m_landParticles0->loadScaledDefaults(s);
-    player->m_landParticles1->loadScaledDefaults(s);
-    player->m_playerGroundParticles->loadScaledDefaults(s);
-    player->m_vehicleGroundParticles->loadScaledDefaults(s);
-    player->m_trailingParticles->loadScaledDefaults(s);
-    player->m_shipClickParticles->loadScaledDefaults(s);
-    player->m_ufoClickParticles->loadScaledDefaults(s);
-    player->m_robotBurstParticles->loadScaledDefaults(s);
-    player->m_dashParticles->loadScaledDefaults(s);
-    player->m_swingBurstParticles1->loadScaledDefaults(s);
-    player->m_swingBurstParticles2->loadScaledDefaults(s);
-    player->m_regularTrail->setStroke(player->m_streakStrokeWidth * s * (player->m_isDart ? .8f : 1.f));
-    if (player->m_playEffects || player->m_isDart)
-        player->m_waveTrail->m_waveSize = s;
-    if (player->m_ghostTrail)
-        player->m_ghostTrail->m_playerScale = s;
-    if (player->m_isBall && player->m_isRotating && !player->m_isLocked && !player->m_isDashing)
-    {
-        player->m_isRotating = false;
-        player->m_isBallRotating2 = false;
-        player->m_isBallRotating = false;
-        player->m_rotationSpeed = 0.0;
-        player->runBallRotation(1.0); // LATER contains m_vehicleSize
-    }
-    player->placeStreakPoint();
-    player->updateRobotAnimationSpeed(); // LATER contains m_vehicleSize
+    setPlayerSize(player, PLAYER_SIZE);
 
     auto playLayer = PlayLayer::get();
     if (player->m_playEffects && !player->m_maybeReducedEffects && playLayer && !playLayer->m_skipArtReload)

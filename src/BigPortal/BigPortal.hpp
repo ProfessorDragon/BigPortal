@@ -30,13 +30,11 @@ public:
 public:
     static BigPortal *create();
 
+    static void setPlayerSize(PlayerObject *player, float s);
+
     bool init() override;
 
     void customSetup() override;
-
-    // void addMainSpriteToParent(bool reorder) override;
-
-    // void setupCustomSprites(gd::string frameName) override;
 
     bool canAllowMultiActivate() override;
 

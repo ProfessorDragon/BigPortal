@@ -1,26 +1,46 @@
 #include <Geode/Geode.hpp>
 #include "BigPortal/BigPortal.hpp"
+#include "PlayerCheckpoint.cpp"
 
 using namespace geode::prelude;
 
 #include <Geode/modify/PlayerObject.hpp>
 class $modify(MyPlayerObject, PlayerObject)
 {
-    // static void onModify(auto &self)
-    // {
-    //     if (!self.setHookPriorityPre("PlayerObject::propellPlayer", Priority::Last))
-    //         log::warn("Failed to set hook priority for propellPlayer!");
+    static void onModify(auto &self)
+    {
+        if (!self.setHookPriorityPre("PlayerObject::propellPlayer", Priority::Last))
+            log::warn("Failed to set hook priority for propellPlayer!");
 
-    //     if (!self.setHookPriorityPre("PlayerObject::ringJump", Priority::Last))
-    //         log::warn("Failed to set hook priority for ringJump!");
+        if (!self.setHookPriorityPre("PlayerObject::ringJump", Priority::Last))
+            log::warn("Failed to set hook priority for ringJump!");
 
-    //     if (!self.setHookPriorityPre("PlayerObject::updateJump", Priority::Last))
-    //         log::warn("Failed to set hook priority for updateJump!");
-    // }
+        if (!self.setHookPriorityPre("PlayerObject::updateJump", Priority::Last))
+            log::warn("Failed to set hook priority for updateJump!");
+    }
+
+    bool isBig(float s)
+    {
+        return s > 1.f;
+    }
 
     bool isBig()
     {
-        return m_vehicleSize > 1.f;
+        return isBig(m_vehicleSize);
+    }
+
+    void loadFromCheckpoint(PlayerCheckpoint *object)
+    {
+        PlayerObject::loadFromCheckpoint(object);
+
+        if (auto checkpoint = static_cast<MyPlayerCheckpoint *>(object))
+        {
+            if (isBig(checkpoint->m_fields->m_vehicleSize))
+            {
+                BigPortal::setPlayerSize(this, checkpoint->m_fields->m_vehicleSize);
+                updatePlayerScale();
+            }
+        }
     }
 
     void propellPlayer(float yVelocity, bool noEffects, int objectTypeInt)
@@ -338,6 +358,16 @@ class $modify(MyPlayerObject, PlayerObject)
             editor->flipGravity(this, !m_isUpsideDown, true);
         else
             flipGravity(!m_isUpsideDown, true);
+    }
+
+    void saveToCheckpoint(PlayerCheckpoint *object)
+    {
+        PlayerObject::saveToCheckpoint(object);
+
+        if (auto checkpoint = static_cast<MyPlayerCheckpoint *>(object))
+        {
+            checkpoint->m_fields->m_vehicleSize = m_vehicleSize;
+        }
     }
 
     void togglePlayerScale(bool enable, bool noEffects)
