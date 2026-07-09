@@ -23,8 +23,8 @@ class $modify(EditButtonBar)
 {
     void loadFromItems(CCArray *objects, int rows, int columns, bool keepPage)
     {
-        // TODO i dont think this works when i dont have DevTools
-        if (getID() != "portal-tab-bar")
+        // getID() != "portal-tab-bar" // doesn't work on some devices
+        if (m_tabIndex != 5)
         {
             EditButtonBar::loadFromItems(objects, rows, columns, keepPage);
             return;
@@ -37,24 +37,31 @@ class $modify(EditButtonBar)
             return;
         }
 
-        auto newBtn = g_editorUi->getCreateBtn(BigPortal::OBJECT_ID, 4);
+        // insert portal into objects array
+        int insertIndex = objects->count();
 
-        // try to insert it after the mini portal
-        bool inserted = false;
         for (int i = 0; i < objects->count(); i++)
         {
             auto btn = static_cast<CreateMenuItem *>(objects->objectAtIndex(i));
+
+            // try to insert it after the mini portal
             if (btn->m_objectID == 101)
             {
-                objects->insertObject(newBtn, i + 1);
-                inserted = true;
-                break;
+                insertIndex = i + 1;
+            }
+            // big portal has aleady been added, abort
+            else if (btn->m_objectID == BigPortal::OBJECT_ID)
+            {
+                EditButtonBar::loadFromItems(objects, rows, columns, keepPage);
+                return;
             }
         }
 
-        // if it fails for some reason, put it at the end
-        if (!inserted)
-            objects->addObject(newBtn);
+        // insertIndex will fall back to the end of the array
+        if (auto newBtn = g_editorUi->getCreateBtn(BigPortal::OBJECT_ID, 4))
+        {
+            objects->insertObject(newBtn, insertIndex);
+        }
 
         EditButtonBar::loadFromItems(objects, rows, columns, keepPage);
     }
