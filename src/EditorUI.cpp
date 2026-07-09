@@ -23,6 +23,7 @@ class $modify(EditButtonBar)
 {
     void loadFromItems(CCArray *objects, int rows, int columns, bool keepPage)
     {
+        // TODO i dont think this works when i dont have DevTools
         if (getID() != "portal-tab-bar")
         {
             EditButtonBar::loadFromItems(objects, rows, columns, keepPage);
