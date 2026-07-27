@@ -119,7 +119,7 @@ class $modify(MyPlayerObject, PlayerObject)
         if (m_isDead || !m_stateRingJump2 || m_isDashing || !m_stateJumpBuffered || m_touchedRing)
             return;
 
-        if (m_ringRelatedSet.contains(object->m_uniqueID))
+        if (m_ringRelatedSet.find(object->m_uniqueID) != m_ringRelatedSet.end())
             return;
 
         bool hasNoEffects = object->m_hasNoEffects;
