@@ -1,8 +1,8 @@
 # Big Portal
 
-Like the mini portal, but big.
+Like the mini portal, but big. A gameplay addition.
 
-Available in the level editor, in the rings tab, next to the mini portal.
+Available in the level editor, in the rings tab.
 
 
 ## Important!
@@ -10,5 +10,3 @@ Available in the level editor, in the rings tab, next to the mini portal.
 <cr>Only players with the mod can use the portal.</c>
 
 This means that if other people try to play your level without the mod, the big portal will be invisible and will not make the player big.
-
-If you save your level in the editor with the mod uninstalled or disabled, <cr>all big portals will be deleted</c> from it.
