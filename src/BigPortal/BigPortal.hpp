@@ -1,38 +1,41 @@
 #pragma once
 
 #include <Geode/Geode.hpp>
+#include <smjs.object-collab/include/object_collab.hpp>
 
 using namespace geode::prelude;
+using namespace object_collab::prelude;
 
-class BigPortal : public EffectGameObject
-{
-public:
+class $object(BigPortal, EffectGameObject) {
+   public:
     static const ccColor3B EFFECT_COLOR;
 
     static const std::string FRAME_BACK;
 
     static const std::string FRAME_FRONT;
 
-    static const int OBJECT_ID;
-
     static const int PARENT_MODE;
 
     static const float PLAYER_SIZE;
 
-protected:
-    CCSprite *m_portalBack = nullptr;
+    static const std::string STRING_ID;
 
-public:
-    static bool is(int objectId) { return objectId == OBJECT_ID; }
+   protected:
+    CCSprite* m_portalBack = nullptr;
 
-    static bool is(GameObject *obj) { return is(obj->m_objectID); }
+   public:
+    static bool is(int objectId) {
+        return objectId == ObjectAPI::getCustomObjectNumericID(STRING_ID);
+    }
 
-public:
-    static BigPortal *create();
+    static bool is(GameObject* obj) { return is(obj->m_objectID); }
 
-    static void setPlayerSize(PlayerObject *player, float s);
+   public:
+    static BigPortal* create(ObjectInfo* info);
 
-    bool init() override;
+    BigPortal(ObjectInfo* info) : CustomObject(info, GameObjectType::Modifier) {}
+
+    static void setPlayerSize(PlayerObject* player, float s);
 
     void customSetup() override;
 
@@ -44,7 +47,7 @@ public:
 
     void setOpacity(unsigned char opacity) override;
 
-    void setPosition(CCPoint const &position) override;
+    void setPosition(CCPoint const& position) override;
 
     void setRotation(float rotation) override;
 
@@ -52,15 +55,16 @@ public:
 
     void setVisible(bool visible) override;
 
-    void triggerObject(GJBaseGameLayer *layer, int uniqueID, gd::vector<int> const *remapKeys) override;
+    void triggerObject(GJBaseGameLayer* layer, int uniqueID,
+                       gd::vector<int> const* remapKeys) override;
 
     void playShineEffect();
 
-    void runScaleAction(PlayerObject *player);
+    void runScaleAction(PlayerObject* player);
 
-    void spawnLightning(PlayerObject *player);
+    void spawnLightning(PlayerObject* player);
 
-    void spawnPortalCircle(PlayerObject *player);
+    void spawnPortalCircle(PlayerObject* player);
 
-    void spawnScaleCircle(PlayerObject *player);
+    void spawnScaleCircle(PlayerObject* player);
 };

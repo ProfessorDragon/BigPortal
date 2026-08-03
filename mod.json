@@ -12,7 +12,11 @@
 	"developer": "ProfDragon",
 	"description": "Like the mini portal, but big",
 	"dependencies": {
-		"geode.node-ids": ">=v1.23.3"
+		"geode.node-ids": ">=v1.23.3",
+		"smjs.object-collab": {
+			"version": ">=0.2.0-beta.1",
+			"required": true
+		}
 	},
 	"resources": {
 		"spritesheets": {
