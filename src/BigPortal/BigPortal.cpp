@@ -42,14 +42,21 @@ void BigPortal::setPlayerSize(PlayerObject* player, float s) {
     player->m_swingBurstParticles2->loadScaledDefaults(s);
     player->m_regularTrail->setStroke(player->m_streakStrokeWidth * s *
                                       (player->m_isDart ? .8f : 1.f));
-    if (player->m_playEffects || player->m_isDart) player->m_waveTrail->m_waveSize = s;
-    if (player->m_ghostTrail) player->m_ghostTrail->m_playerScale = s;
+    if (player->m_playEffects || player->m_isDart) {
+        player->m_waveTrail->m_waveSize = s;
+    }
+    if (player->m_ghostTrail) {
+        player->m_ghostTrail->m_playerScale = s;
+    }
     if (player->m_isBall && player->m_isRotating && !player->m_isLocked && !player->m_isDashing) {
         player->m_isRotating = false;
         player->m_isBallRotating2 = false;
         player->m_isBallRotating = false;
         player->m_rotationSpeed = 0.0;
-        player->runBallRotation(1.0);  // LATER contains m_vehicleSize
+        {
+            // LATER contains m_vehicleSize
+            player->runBallRotation(1.0);
+        }
     }
     player->placeStreakPoint();
     player->updateRobotAnimationSpeed();  // LATER contains m_vehicleSize
@@ -126,12 +133,6 @@ void BigPortal::setVisible(bool visible) {
     if (m_portalBack) m_portalBack->setVisible(visible);
 }
 
-void BigPortal::resetObject() {
-    EffectGameObject::resetObject();
-
-    // m_activated = false;
-}
-
 void BigPortal::triggerObject(GJBaseGameLayer* layer, int uniqueID,
                               gd::vector<int> const* remapKeys) {
     EffectGameObject::triggerObject(layer, uniqueID, remapKeys);
@@ -139,7 +140,9 @@ void BigPortal::triggerObject(GJBaseGameLayer* layer, int uniqueID,
     auto player = (layer->m_player2->m_uniqueID == uniqueID) ? layer->m_player2 : layer->m_player1;
     layer->m_effectManager->removeTriggeredID(m_uniqueID, player->m_uniqueID);
 
-    if (!layer->canBeActivatedByPlayer(player, this)) return;
+    if (!layer->canBeActivatedByPlayer(player, this)) {
+        return;
+    }
 
     player->m_lastActivatedPortal = this;
     player->m_lastPortalPos = getPosition();
@@ -147,7 +150,9 @@ void BigPortal::triggerObject(GJBaseGameLayer* layer, int uniqueID,
 
     playShineEffect();
 
-    if (player->m_vehicleSize == PLAYER_SIZE) return;
+    if (player->m_vehicleSize == PLAYER_SIZE) {
+        return;
+    }
 
     setPlayerSize(player, PLAYER_SIZE);
 
@@ -160,8 +165,9 @@ void BigPortal::triggerObject(GJBaseGameLayer* layer, int uniqueID,
             spawnPortalCircle(player);
             spawnScaleCircle(player);
         }
-    } else
+    } else {
         player->updatePlayerScale();
+    }
 }
 
 void BigPortal::playShineEffect() {
@@ -181,8 +187,9 @@ void BigPortal::runScaleAction(PlayerObject* player) {
 }
 
 void BigPortal::spawnLightning(PlayerObject* player) {
-    if (auto baseLayer = GJBaseGameLayer::get())
+    if (auto baseLayer = GJBaseGameLayer::get()) {
         baseLayer->lightningFlash(getPosition(), EFFECT_COLOR);
+    }
 }
 
 void BigPortal::spawnPortalCircle(PlayerObject* player) {
@@ -197,9 +204,13 @@ void BigPortal::spawnScaleCircle(PlayerObject* player) {
     wave->followObject(player, true);
     wave->m_color = EFFECT_COLOR;
 
-    if (auto parentLayer = player->getParent()) parentLayer->addChild(wave);
+    if (auto parentLayer = player->getParent()) {
+        parentLayer->addChild(wave);
+    }
 
-    if (auto playLayer = PlayLayer::get()) playLayer->m_circleWaveArray->addObject(wave);
+    if (auto playLayer = PlayLayer::get()) {
+        playLayer->m_circleWaveArray->addObject(wave);
+    }
 
     // for green portal:
     // color = ccc3(0, 255, 150)

@@ -43,8 +43,6 @@ class $object(BigPortal, EffectGameObject) {
 
     bool hasBeenActivated() override;
 
-    void resetObject() override;
-
     void setOpacity(unsigned char opacity) override;
 
     void setPosition(CCPoint const& position) override;
