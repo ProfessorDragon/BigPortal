@@ -8,7 +8,7 @@
 	},
 	"id": "profdragon.bigportal",
 	"name": "Big Portal",
-	"version": "v0.1.0",
+	"version": "v0.2.0",
 	"developer": "ProfDragon",
 	"description": "Like the mini portal, but big",
 	"dependencies": {
