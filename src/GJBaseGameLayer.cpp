@@ -86,19 +86,6 @@ class $modify(MyGJBaseGameLayer, GJBaseGameLayer) {
     void setupLayers() {
         GJBaseGameLayer::setupLayers();
 
-        std::string quality;
-        switch (CCDirector::get()->getLoadedTextureQuality()) {
-            case kTextureQualityLow:
-                quality = "";
-                break;
-            case kTextureQualityMedium:
-                quality = "-hd";
-                break;
-            case kTextureQualityHigh:
-                quality = "-uhd";
-                break;
-        }
-
         auto cache = CCSpriteFrameCache::sharedSpriteFrameCache();
         auto sheet = cache->spriteFrameByName(BigPortal::FRAME_FRONT.c_str())->getTexture();
         if (!sheet) {
