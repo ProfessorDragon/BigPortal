@@ -37,6 +37,8 @@ class $object(BigPortal, EffectGameObject) {
 
     static void setPlayerSize(PlayerObject* player, float s);
 
+    void activatedByPlayer(PlayerObject* player) override;
+
     void customSetup() override;
 
     bool canAllowMultiActivate() override;

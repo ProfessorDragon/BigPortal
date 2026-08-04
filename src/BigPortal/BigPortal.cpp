@@ -62,6 +62,34 @@ void BigPortal::setPlayerSize(PlayerObject* player, float s) {
     player->updateRobotAnimationSpeed();  // LATER contains m_vehicleSize
 }
 
+void BigPortal::activatedByPlayer(PlayerObject* player) {
+    EffectGameObject::activatedByPlayer(player);
+
+    player->m_lastActivatedPortal = this;
+    player->m_lastPortalPos = getPosition();
+
+    playShineEffect();
+
+    if (player->m_vehicleSize == PLAYER_SIZE) {
+        return;
+    }
+
+    setPlayerSize(player, PLAYER_SIZE);
+
+    auto playLayer = PlayLayer::get();
+    if (player->m_playEffects && !player->m_maybeReducedEffects && playLayer &&
+        !playLayer->m_skipArtReload) {
+        runScaleAction(player);
+        if (!m_hasNoEffects) {
+            spawnLightning(player);
+            spawnPortalCircle(player);
+            spawnScaleCircle(player);
+        }
+    } else {
+        player->updatePlayerScale();
+    }
+}
+
 void BigPortal::customSetup() {
     EffectGameObject::customSetup();
 
@@ -69,7 +97,6 @@ void BigPortal::customSetup() {
 
     // https://github.com/glow13/CustomObjectsAPI/blob/a8c341d22e1ffcf67cba01bd86569758a80c34b3/include/object/CustomPortalObject.hpp
     // THANK YOU!!!!!
-    m_objectType = GameObjectType::Modifier;
     m_baseColor->m_defaultColorID = 0;
     m_width = 31.f;
     m_height = 90.f;
@@ -81,6 +108,7 @@ void BigPortal::customSetup() {
     m_isSpawnTriggered = false;
     m_isTouchTriggered = true;
     m_isMultiTriggered = false;
+    m_dontIgnoreDuration = false;
 
     if (!m_editorEnabled) {
         auto baseLayer = static_cast<MyGJBaseGameLayer*>(GJBaseGameLayer::get());
@@ -98,8 +126,6 @@ void BigPortal::customSetup() {
         particles->setEndColor(ccc4FFromccc3B(BigPortal::EFFECT_COLOR));
         claimParticle();
     }
-
-    m_dontIgnoreDuration = false;
 }
 
 bool BigPortal::canAllowMultiActivate() { return true; }
@@ -144,30 +170,7 @@ void BigPortal::triggerObject(GJBaseGameLayer* layer, int uniqueID,
         return;
     }
 
-    player->m_lastActivatedPortal = this;
-    player->m_lastPortalPos = getPosition();
     activatedByPlayer(player);
-
-    playShineEffect();
-
-    if (player->m_vehicleSize == PLAYER_SIZE) {
-        return;
-    }
-
-    setPlayerSize(player, PLAYER_SIZE);
-
-    auto playLayer = PlayLayer::get();
-    if (player->m_playEffects && !player->m_maybeReducedEffects && playLayer &&
-        !playLayer->m_skipArtReload) {
-        runScaleAction(player);
-        if (!m_hasNoEffects) {
-            spawnLightning(player);
-            spawnPortalCircle(player);
-            spawnScaleCircle(player);
-        }
-    } else {
-        player->updatePlayerScale();
-    }
 }
 
 void BigPortal::playShineEffect() {
