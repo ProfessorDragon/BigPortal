@@ -97,9 +97,8 @@ void BigPortal::customSetup() {
 
     // https://github.com/glow13/CustomObjectsAPI/blob/a8c341d22e1ffcf67cba01bd86569758a80c34b3/include/object/CustomPortalObject.hpp
     // THANK YOU!!!!!
+    setRawHitbox(CCSize{31.f, 90.f});
     m_baseColor->m_defaultColorID = 0;
-    m_width = 31.f;
-    m_height = 90.f;
     m_zFixedZLayer = true;
     m_defaultZLayer = ZLayer::T1;
     m_particleOffset = CCPoint{-5, 0};
