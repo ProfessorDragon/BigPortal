@@ -23,6 +23,31 @@ BigPortal* BigPortal::create(ObjectInfo* info) {
     return new BigPortal(info);
 }
 
+PopupOptions BigPortal::getEditSpecialConfig(const Selected& selected) {
+    return PopupConfig::builder()
+        .width(200)
+        .height(140)
+        .title("Big Portal")
+        .menu(AxisLayoutMenu::builder()
+                  // TODO use main axis scaling @smjs
+                  // TODO scale up the ToggleMenu a little bit to match rob
+                  .mainAxisAlignment(MainAxisAlignment::Center)
+                  .menu(ToggleMenu::builder()
+                            .id("no-multi-activate"_spr)
+                            .title("No Multi\nActivate")
+                            .currentValue([](const Selected& selected, Popup* popup) {
+                                return getCommonValueOrDefault(selected,
+                                                               &BigPortal::m_isNoMultiActivate);
+                            })
+                            .onValue([](const bool value, const Selected& selected, Popup* popup) {
+                                applyValueToSelected(selected, &BigPortal::m_isNoMultiActivate,
+                                                     value);
+                            })
+                            .build())
+                  .build())
+        .build();
+}
+
 void BigPortal::setPlayerSize(PlayerObject* player, float s) {
     player->m_vehicleSize = s;
     player->m_spriteWidthScale = s;

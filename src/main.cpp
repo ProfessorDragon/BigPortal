@@ -16,6 +16,7 @@ $on_mod(Loaded) {
             .sprite(BigPortal::FRAME_FRONT)
             .editorTab(EditorTab::Modifiers)
             .construction(ComplexObject::builder().factory(BigPortal::create).build())
+            .editSpecial(BigPortal::getEditSpecialConfig)
             .build());
 }
 

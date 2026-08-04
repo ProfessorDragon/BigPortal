@@ -33,6 +33,8 @@ class $object(BigPortal, EffectGameObject) {
    public:
     static BigPortal* create(ObjectInfo* info);
 
+    static PopupOptions getEditSpecialConfig(const Selected& selected);
+
     BigPortal(ObjectInfo* info) : CustomObject(info, GameObjectType::Modifier) {}
 
     static void setPlayerSize(PlayerObject* player, float s);
