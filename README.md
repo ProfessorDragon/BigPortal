@@ -14,7 +14,8 @@ See [about.md](about.md) for instructions on using it.
 
 ## Special thanks
 
+- Ghidra
 - https://github.com/NicknameGG/The-intense-adding-of-a-new-object-in-a-new-tab
 - https://github.com/camila314/gd-custom-object/
 - https://github.com/glow13/CustomObjectsAPI/
-- Ghidra
+- https://github.com/SMJSProductions/Object-Collab

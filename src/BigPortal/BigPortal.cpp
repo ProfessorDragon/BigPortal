@@ -133,54 +133,12 @@ void BigPortal::customSetup() {
     m_isTouchTriggered = true;
     m_isMultiTriggered = false;
     m_dontIgnoreDuration = false;
-
-    if (!m_editorEnabled) {
-        auto baseLayer = static_cast<MyGJBaseGameLayer*>(GJBaseGameLayer::get());
-        auto parent = baseLayer->m_fields->m_customLayerB1;
-        m_portalBack = CCSprite::createWithSpriteFrameName(FRAME_BACK.c_str());
-        m_portalBack->setPosition(parent->convertToNodeSpace(CCPoint{}));
-        parent->addChild(m_portalBack, -90);
-    }
-
-    if (!m_editorEnabled && !m_hasNoParticles) {
-        auto particles = createAndAddParticle(6, "portalEffect08.plist", 4,
-                                              tCCPositionType::kCCPositionTypeGrouped);
-        particles->setStartColor(ccc4FFromccc3B(BigPortal::EFFECT_COLOR));
-        particles->setStartColorVar(ccc4f(.25f, .25f, 0.f, .5f));
-        particles->setEndColor(ccc4FFromccc3B(BigPortal::EFFECT_COLOR));
-        claimParticle();
-    }
 }
 
 bool BigPortal::canAllowMultiActivate() { return true; }
 
 bool BigPortal::hasBeenActivated() {
     return EffectGameObject::hasBeenActivated() && m_isNoMultiActivate;
-}
-
-void BigPortal::setOpacity(unsigned char opacity) {
-    EffectGameObject::setOpacity(opacity);
-    if (m_portalBack) m_portalBack->setOpacity(opacity);
-}
-
-void BigPortal::setPosition(CCPoint const& position) {
-    EffectGameObject::setPosition(position);
-    if (m_portalBack) m_portalBack->setPosition(position);
-}
-
-void BigPortal::setRotation(float rotation) {
-    EffectGameObject::setRotation(rotation);
-    if (m_portalBack) m_portalBack->setRotation(rotation);
-}
-
-void BigPortal::setScale(float scale) {
-    EffectGameObject::setScale(scale);
-    if (m_portalBack) m_portalBack->setScale(scale);
-}
-
-void BigPortal::setVisible(bool visible) {
-    EffectGameObject::setVisible(visible);
-    if (m_portalBack) m_portalBack->setVisible(visible);
 }
 
 void BigPortal::triggerObject(GJBaseGameLayer* layer, int uniqueID,
@@ -202,6 +160,22 @@ void BigPortal::playShineEffect() {
     m_objectID = 99;
     EffectGameObject::playShineEffect();
     m_objectID = objectId;
+}
+
+void BigPortal::postPlayLayerInit() {
+    if (auto portalBack = createBackFrame(FRAME_BACK, CCPoint{})) {
+        // TODO remove after smjs update
+        portalBack->m_addToNodeContainer = true;
+    }
+
+    if (!m_hasNoParticles) {
+        auto particles = createAndAddParticle(6, "portalEffect08.plist", 4,
+                                              tCCPositionType::kCCPositionTypeGrouped);
+        particles->setStartColor(ccc4FFromccc3B(BigPortal::EFFECT_COLOR));
+        particles->setStartColorVar(ccc4f(.25f, .25f, 0.f, .5f));
+        particles->setEndColor(ccc4FFromccc3B(BigPortal::EFFECT_COLOR));
+        claimParticle();
+    }
 }
 
 void BigPortal::runScaleAction(PlayerObject* player) {

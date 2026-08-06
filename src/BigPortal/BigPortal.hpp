@@ -20,9 +20,6 @@ class $object(BigPortal, EffectGameObject) {
 
     static const std::string STRING_ID;
 
-   protected:
-    CCSprite* m_portalBack = nullptr;
-
    public:
     static bool is(int objectId) {
         return objectId == ObjectAPI::getCustomObjectNumericID(STRING_ID);
@@ -35,7 +32,9 @@ class $object(BigPortal, EffectGameObject) {
 
     static PopupOptions getEditSpecialConfig(const Selected& selected);
 
-    BigPortal(ObjectInfo* info) : CustomObject(info, GameObjectType::Modifier) {}
+    BigPortal(ObjectInfo* info)
+        : CustomObject(info,
+                       ObjectTraits::builder().gameObjectType(GameObjectType::Modifier).build()) {}
 
     static void setPlayerSize(PlayerObject* player, float s);
 
@@ -47,20 +46,12 @@ class $object(BigPortal, EffectGameObject) {
 
     bool hasBeenActivated() override;
 
-    void setOpacity(unsigned char opacity) override;
-
-    void setPosition(CCPoint const& position) override;
-
-    void setRotation(float rotation) override;
-
-    void setScale(float scale) override;
-
-    void setVisible(bool visible) override;
-
     void triggerObject(GJBaseGameLayer* layer, int uniqueID,
                        gd::vector<int> const* remapKeys) override;
 
     void playShineEffect();
+
+    void postPlayLayerInit() override;
 
     void runScaleAction(PlayerObject* player);
 

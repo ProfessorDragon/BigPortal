@@ -1,5 +1,5 @@
 {
-	"geode": "5.7.1",
+	"geode": "5.8.2",
 	"gd": {
 		"win": "2.2081",
 		"android": "2.2081",
@@ -14,7 +14,7 @@
 	"dependencies": {
 		"geode.node-ids": ">=v1.23.3",
 		"smjs.object-collab": {
-			"version": ">=0.2.0-beta.1",
+			"version": ">=0.4.0-beta.1",
 			"required": true
 		}
 	},
