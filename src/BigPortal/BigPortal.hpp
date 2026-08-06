@@ -33,21 +33,15 @@ class $object(BigPortal, EffectGameObject) {
     static PopupOptions getEditSpecialConfig(const Selected& selected);
 
     BigPortal(ObjectInfo* info)
-        : CustomObject(info,
-                       ObjectTraits::builder().gameObjectType(GameObjectType::Modifier).build()) {}
+        : CustomObject(info, ObjectTraits::builder()
+                                 .gameObjectType(GameObjectType::MiniSizePortal)
+                                 .defaultMainColorID(0)
+                                 .defaultZLayer(ZLayer::T1)
+                                 .build()) {}
 
     static void setPlayerSize(PlayerObject* player, float s);
 
     void activatedByPlayer(PlayerObject* player) override;
-
-    void customSetup() override;
-
-    bool canAllowMultiActivate() override;
-
-    bool hasBeenActivated() override;
-
-    void triggerObject(GJBaseGameLayer* layer, int uniqueID,
-                       gd::vector<int> const* remapKeys) override;
 
     void playShineEffect();
 

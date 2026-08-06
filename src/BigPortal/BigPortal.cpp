@@ -29,8 +29,6 @@ PopupOptions BigPortal::getEditSpecialConfig(const Selected& selected) {
         .height(140)
         .title("Big Portal")
         .menu(AxisLayoutMenu::builder()
-                  // TODO use main axis scaling @smjs
-                  // TODO scale up the ToggleMenu a little bit to match rob
                   .mainAxisAlignment(MainAxisAlignment::Center)
                   .menu(ToggleMenu::builder()
                             .id("no-multi-activate"_spr)
@@ -115,46 +113,6 @@ void BigPortal::activatedByPlayer(PlayerObject* player) {
     }
 }
 
-void BigPortal::customSetup() {
-    EffectGameObject::customSetup();
-
-    m_parentMode = PARENT_MODE;
-
-    // https://github.com/glow13/CustomObjectsAPI/blob/a8c341d22e1ffcf67cba01bd86569758a80c34b3/include/object/CustomPortalObject.hpp
-    // THANK YOU!!!!!
-    setRawHitbox(CCSize{31.f, 90.f});
-    m_baseColor->m_defaultColorID = 0;
-    m_zFixedZLayer = true;
-    m_defaultZLayer = ZLayer::T1;
-    m_particleOffset = CCPoint{-5, 0};
-
-    m_isTrigger = false;
-    m_isSpawnTriggered = false;
-    m_isTouchTriggered = true;
-    m_isMultiTriggered = false;
-    m_dontIgnoreDuration = false;
-}
-
-bool BigPortal::canAllowMultiActivate() { return true; }
-
-bool BigPortal::hasBeenActivated() {
-    return EffectGameObject::hasBeenActivated() && m_isNoMultiActivate;
-}
-
-void BigPortal::triggerObject(GJBaseGameLayer* layer, int uniqueID,
-                              gd::vector<int> const* remapKeys) {
-    EffectGameObject::triggerObject(layer, uniqueID, remapKeys);
-
-    auto player = (layer->m_player2->m_uniqueID == uniqueID) ? layer->m_player2 : layer->m_player1;
-    layer->m_effectManager->removeTriggeredID(m_uniqueID, player->m_uniqueID);
-
-    if (!layer->canBeActivatedByPlayer(player, this)) {
-        return;
-    }
-
-    activatedByPlayer(player);
-}
-
 void BigPortal::playShineEffect() {
     int objectId = m_objectID;
     m_objectID = 99;
@@ -163,10 +121,7 @@ void BigPortal::playShineEffect() {
 }
 
 void BigPortal::postPlayLayerInit() {
-    if (auto portalBack = createBackFrame(FRAME_BACK, CCPoint{})) {
-        // TODO remove after smjs update
-        portalBack->m_addToNodeContainer = true;
-    }
+    createBackFrame(FRAME_BACK, CCPoint{});
 
     if (!m_hasNoParticles) {
         auto particles = createAndAddParticle(6, "portalEffect08.plist", 4,
