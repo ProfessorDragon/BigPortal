@@ -14,8 +14,6 @@ class $object(BigPortal, EffectGameObject) {
 
     static const std::string FRAME_FRONT;
 
-    static const int PARENT_MODE;
-
     static const float PLAYER_SIZE;
 
     static const std::string STRING_ID;
@@ -37,6 +35,11 @@ class $object(BigPortal, EffectGameObject) {
                                  .gameObjectType(GameObjectType::MiniSizePortal)
                                  .defaultMainColorID(0)
                                  .defaultZLayer(ZLayer::T1)
+                                 // linker error
+                                 //  .onPlayShineEffect([](geode::Function<void()> original) {
+                                 //      log::info("shine");
+                                 //      original();
+                                 //  })
                                  .build()) {}
 
     static void setPlayerSize(PlayerObject* player, float s);

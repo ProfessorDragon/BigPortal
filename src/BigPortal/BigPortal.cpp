@@ -10,8 +10,6 @@ const std::string BigPortal::FRAME_BACK = "big-portal-back.png"_spr;
 
 const std::string BigPortal::FRAME_FRONT = "big-portal-front.png"_spr;
 
-const int BigPortal::PARENT_MODE = 10;
-
 const float BigPortal::PLAYER_SIZE = 1.6f;
 
 const std::string BigPortal::STRING_ID = "big-portal"_spr;
@@ -88,10 +86,10 @@ void BigPortal::setPlayerSize(PlayerObject* player, float s) {
 void BigPortal::activatedByPlayer(PlayerObject* player) {
     EffectGameObject::activatedByPlayer(player);
 
-    player->m_lastActivatedPortal = this;
-    player->m_lastPortalPos = getPosition();
+    // player->m_lastActivatedPortal = this;
+    // player->m_lastPortalPos = getPosition();
 
-    playShineEffect();
+    // playShineEffect();
 
     if (player->m_vehicleSize == PLAYER_SIZE) {
         return;
