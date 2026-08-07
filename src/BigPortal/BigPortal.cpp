@@ -26,6 +26,7 @@ PopupOptions BigPortal::getEditSpecialConfig(const Selected& selected) {
         .width(200)
         .height(140)
         .title("Big Portal")
+        // TODO fixxxxxx
         .menu(AxisLayoutMenu::builder()
                   .mainAxisAlignment(MainAxisAlignment::Center)
                   .menu(ToggleMenu::builder()
@@ -84,6 +85,7 @@ void BigPortal::setPlayerSize(PlayerObject* player, float s) {
 }
 
 void BigPortal::activatedByPlayer(PlayerObject* player) {
+    // TODO prevent pink lightning
     EffectGameObject::activatedByPlayer(player);
 
     // player->m_lastActivatedPortal = this;

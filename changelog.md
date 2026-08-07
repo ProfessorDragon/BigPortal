@@ -1,3 +1,10 @@
+# 0.2.1
+
+- Fixed potential undefined behavior / crashes
+    - Big portal uses GameObjectType::MiniSizePortal instead of Modifier
+    - Removed custom managed child and layers in favor of CustomObject::createBackFrame
+
+
 # 0.2.0
 
 - Migrate to Object Collab API

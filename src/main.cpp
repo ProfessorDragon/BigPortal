@@ -7,9 +7,6 @@ using namespace geode::prelude;
 using namespace object_collab::prelude;
 
 $on_mod(Loaded) {
-    CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile(
-        "BigPortalSheet.plist"_spr);
-
     ObjectAPI::registerObject(
         ObjectInfo::builder()
             .id(BigPortal::STRING_ID)
