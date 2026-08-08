@@ -1,3 +1,8 @@
+# 0.2.2
+
+- Improved performance when touching size portals
+
+
 # 0.2.1
 
 - Fixed potential undefined behavior / crashes

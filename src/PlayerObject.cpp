@@ -364,10 +364,8 @@ class $modify(MyPlayerObject, PlayerObject) {
     }
 
     void togglePlayerScale(bool enable, bool noEffects) {
-        int objectId = m_lastActivatedPortal ? m_lastActivatedPortal->m_objectID : 0;
-
         // mini/regular/big -> big
-        if (BigPortal::is(objectId)) {
+        CUSTOM_OBJECT_IMPLEMENT(m_lastActivatedPortal, BigPortal, _, {
             if (m_vehicleSize == BigPortal::PLAYER_SIZE) {
                 return;
             }
@@ -384,10 +382,11 @@ class $modify(MyPlayerObject, PlayerObject) {
             } else {
                 updatePlayerScale();
             }
-        }
+            return;
+        });
 
         // big -> mini/regular
-        else if (isBig()) {
+        if (isBig()) {
             // pretend it's the opposite size to make the super call work
             m_vehicleSize = enable ? 1.f : .6f;
 

@@ -19,13 +19,6 @@ class $object(BigPortal, EffectGameObject) {
     static const std::string STRING_ID;
 
    public:
-    static bool is(int objectId) {
-        return objectId == ObjectAPI::getCustomObjectNumericID(STRING_ID);
-    }
-
-    static bool is(GameObject* obj) { return is(obj->m_objectID); }
-
-   public:
     static BigPortal* create(ObjectInfo* info);
 
     static PopupOptions getEditSpecialConfig(const Selected& selected);
