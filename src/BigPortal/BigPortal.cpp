@@ -45,6 +45,19 @@ PopupOptions BigPortal::getEditSpecialConfig(const Selected& selected) {
         .build();
 }
 
+void BigPortal::postPlayLayerInit() {
+    createBackFrame(FRAME_BACK, CCPoint{});
+
+    if (!m_hasNoParticles) {
+        auto particles = createAndAddParticle(6, "portalEffect08.plist", 4,
+                                              tCCPositionType::kCCPositionTypeGrouped);
+        particles->setStartColor(ccc4FFromccc3B(BigPortal::EFFECT_COLOR));
+        particles->setStartColorVar(ccc4f(.25f, .25f, 0.f, .5f));
+        particles->setEndColor(ccc4FFromccc3B(BigPortal::EFFECT_COLOR));
+        claimParticle();
+    }
+}
+
 void BigPortal::setPlayerSize(PlayerObject* player, float s) {
     player->m_vehicleSize = s;
     player->m_spriteWidthScale = s;
@@ -75,49 +88,11 @@ void BigPortal::setPlayerSize(PlayerObject* player, float s) {
         player->m_isBallRotating2 = false;
         player->m_isBallRotating = false;
         player->m_rotationSpeed = 0.0;
-        {
-            // LATER contains m_vehicleSize
-            player->runBallRotation(1.0);
-        }
+        // LATER contains m_vehicleSize
+        player->runBallRotation(1.0);
     }
     player->placeStreakPoint();
     player->updateRobotAnimationSpeed();  // LATER contains m_vehicleSize
-}
-
-void BigPortal::activatedByPlayer(PlayerObject* player) {
-    EffectGameObject::activatedByPlayer(player);
-
-    if (player->m_vehicleSize == PLAYER_SIZE) {
-        return;
-    }
-
-    setPlayerSize(player, PLAYER_SIZE);
-
-    auto playLayer = PlayLayer::get();
-    if (player->m_playEffects && !player->m_maybeReducedEffects && playLayer &&
-        !playLayer->m_skipArtReload) {
-        runScaleAction(player);
-        if (!m_hasNoEffects) {
-            spawnLightning(player);
-            spawnPortalCircle(player);
-            spawnScaleCircle(player);
-        }
-    } else {
-        player->updatePlayerScale();
-    }
-}
-
-void BigPortal::postPlayLayerInit() {
-    createBackFrame(FRAME_BACK, CCPoint{});
-
-    if (!m_hasNoParticles) {
-        auto particles = createAndAddParticle(6, "portalEffect08.plist", 4,
-                                              tCCPositionType::kCCPositionTypeGrouped);
-        particles->setStartColor(ccc4FFromccc3B(BigPortal::EFFECT_COLOR));
-        particles->setStartColorVar(ccc4f(.25f, .25f, 0.f, .5f));
-        particles->setEndColor(ccc4FFromccc3B(BigPortal::EFFECT_COLOR));
-        claimParticle();
-    }
 }
 
 void BigPortal::runScaleAction(PlayerObject* player) {
@@ -129,28 +104,51 @@ void BigPortal::runScaleAction(PlayerObject* player) {
     player->runAction(ease);
 }
 
-void BigPortal::spawnLightning(PlayerObject* player) {
-    if (auto baseLayer = GJBaseGameLayer::get()) {
-        baseLayer->lightningFlash(getPosition(), EFFECT_COLOR);
+void BigPortal::runGrowToBigEffects(PlayerObject* player) {
+    // lightning
+    if (player->m_lastActivatedPortal) {
+        if (auto baseLayer = GJBaseGameLayer::get()) {
+            baseLayer->lightningFlash(player->m_lastActivatedPortal->getPosition(), EFFECT_COLOR);
+        }
     }
-}
 
-void BigPortal::spawnPortalCircle(PlayerObject* player) {
-    int objectId = m_objectID;
-    m_objectID = 99;
+    // portal circle
     player->spawnPortalCircle(EFFECT_COLOR, 45.f);
-    m_objectID = objectId;
-}
 
-void BigPortal::spawnScaleCircle(PlayerObject* player) {
-    auto wave = CCCircleWave::create(10.f, 60.f, .35f, false, true);
+    // scale circle (PlayerObject::spawnScaleCircle)
+    // follows same ratio as green portal
+    auto wave = CCCircleWave::create(10.f, PLAYER_SIZE * 40.f, .3f, false, true);
     wave->followObject(player, true);
     wave->m_color = EFFECT_COLOR;
-
     if (auto parentLayer = player->getParent()) {
         parentLayer->addChild(wave);
     }
+    if (auto playLayer = PlayLayer::get()) {
+        playLayer->m_circleWaveArray->addObject(wave);
+    }
+}
 
+void BigPortal::runShrinkToRegularEffects(PlayerObject* player) {
+    const ccColor3B color = ccc3(0, 255, 150);
+
+    // lightning
+    if (player->m_lastActivatedPortal) {
+        if (auto baseLayer = GJBaseGameLayer::get()) {
+            baseLayer->lightningFlash(player->m_lastActivatedPortal->getPosition(), color);
+        }
+    }
+
+    // portal circle
+    player->spawnPortalCircle(color, 45.f);
+
+    // scale circle
+    // the ratio for the pink portal should be PLAYER_SIZE * 50.f but it looks bad
+    auto wave = CCCircleWave::create(PLAYER_SIZE * 40.f, 2.f, .25f, true, true);
+    wave->followObject(player, true);
+    wave->m_color = color;
+    if (auto parentLayer = player->getParent()) {
+        parentLayer->addChild(wave);
+    }
     if (auto playLayer = PlayLayer::get()) {
         playLayer->m_circleWaveArray->addObject(wave);
     }

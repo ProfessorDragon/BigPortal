@@ -43,17 +43,13 @@ class $object(BigPortal, EffectGameObject) {
                                  })
                                  .build()) {}
 
-    static void setPlayerSize(PlayerObject* player, float s);
-
-    void activatedByPlayer(PlayerObject* player) override;
-
     void postPlayLayerInit() override;
 
-    void runScaleAction(PlayerObject* player);
+    static void setPlayerSize(PlayerObject* player, float s);
 
-    void spawnLightning(PlayerObject* player);
+    static void runScaleAction(PlayerObject* player);
 
-    void spawnPortalCircle(PlayerObject* player);
+    static void runGrowToBigEffects(PlayerObject* player);
 
-    void spawnScaleCircle(PlayerObject* player);
+    static void runShrinkToRegularEffects(PlayerObject* player);
 };

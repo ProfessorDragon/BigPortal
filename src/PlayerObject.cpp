@@ -365,17 +365,51 @@ class $modify(MyPlayerObject, PlayerObject) {
 
     void togglePlayerScale(bool enable, bool noEffects) {
         int objectId = m_lastActivatedPortal ? m_lastActivatedPortal->m_objectID : 0;
-        // big portal. prevent pink lightning
+
+        // mini/regular/big -> big
         if (BigPortal::is(objectId)) {
-            PlayerObject::togglePlayerScale(enable, true);
-        }
-        // mini/regular size portal
-        else {
-            // pretend it's the opposite size to make the portal work
-            if (isBig()) {
-                m_vehicleSize = enable ? 1.f : .6f;
+            if (m_vehicleSize == BigPortal::PLAYER_SIZE) {
+                return;
             }
-            // TODO use BigPortal::spawnScaleCircle to accurately reflect shrinking in green portal
+
+            BigPortal::setPlayerSize(this, BigPortal::PLAYER_SIZE);
+
+            auto playLayer = PlayLayer::get();
+            if (m_playEffects && !m_maybeReducedEffects && playLayer &&
+                !playLayer->m_skipArtReload) {
+                BigPortal::runScaleAction(this);
+                if (!noEffects) {
+                    BigPortal::runGrowToBigEffects(this);
+                }
+            } else {
+                updatePlayerScale();
+            }
+        }
+
+        // big -> mini/regular
+        else if (isBig()) {
+            // pretend it's the opposite size to make the super call work
+            m_vehicleSize = enable ? 1.f : .6f;
+
+            // shrink in green portal
+            if (!enable) {
+                PlayerObject::togglePlayerScale(enable, true);
+
+                auto playLayer = PlayLayer::get();
+                if (m_playEffects && !m_maybeReducedEffects && playLayer &&
+                    !playLayer->m_skipArtReload && !noEffects) {
+                    BigPortal::runShrinkToRegularEffects(this);
+                }
+            }
+
+            // shrink in mini portal
+            else {
+                PlayerObject::togglePlayerScale(enable, noEffects);
+            }
+        }
+
+        // mini/regular -> mini/regular (vanilla)
+        else {
             PlayerObject::togglePlayerScale(enable, noEffects);
         }
     }
