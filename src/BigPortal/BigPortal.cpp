@@ -26,9 +26,8 @@ PopupOptions BigPortal::getEditSpecialConfig(const Selected& selected) {
         .width(200)
         .height(140)
         .title("Big Portal")
-        // TODO fixxxxxx
         .menu(AxisLayoutMenu::builder()
-                  .mainAxisAlignment(MainAxisAlignment::Center)
+                  .padding(Padding(0.f, 12.5f, 0.f, 7.5f))
                   .menu(ToggleMenu::builder()
                             .id("no-multi-activate"_spr)
                             .title("No Multi\nActivate")
