@@ -364,13 +364,20 @@ class $modify(MyPlayerObject, PlayerObject) {
     }
 
     void togglePlayerScale(bool enable, bool noEffects) {
-        // pretend it's the opposite size to make the portal work
-        // LATER use BigPortal::spawnScaleCircle to accurately reflect shrinking in green portal
-        if (isBig()) {
-            m_vehicleSize = enable ? 1.f : .6f;
+        int objectId = m_lastActivatedPortal ? m_lastActivatedPortal->m_objectID : 0;
+        // big portal. prevent pink lightning
+        if (BigPortal::is(objectId)) {
+            PlayerObject::togglePlayerScale(enable, true);
         }
-
-        PlayerObject::togglePlayerScale(enable, noEffects);
+        // mini/regular size portal
+        else {
+            // pretend it's the opposite size to make the portal work
+            if (isBig()) {
+                m_vehicleSize = enable ? 1.f : .6f;
+            }
+            // TODO use BigPortal::spawnScaleCircle to accurately reflect shrinking in green portal
+            PlayerObject::togglePlayerScale(enable, noEffects);
+        }
     }
 
     void update(float dt) {

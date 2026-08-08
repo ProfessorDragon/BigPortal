@@ -85,7 +85,6 @@ void BigPortal::setPlayerSize(PlayerObject* player, float s) {
 }
 
 void BigPortal::activatedByPlayer(PlayerObject* player) {
-    // TODO prevent pink lightning
     EffectGameObject::activatedByPlayer(player);
 
     if (player->m_vehicleSize == PLAYER_SIZE) {
