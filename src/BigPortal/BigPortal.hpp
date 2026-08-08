@@ -35,18 +35,17 @@ class $object(BigPortal, EffectGameObject) {
                                  .gameObjectType(GameObjectType::MiniSizePortal)
                                  .defaultMainColorID(0)
                                  .defaultZLayer(ZLayer::T1)
-                                 // linker error
-                                 //  .onPlayShineEffect([](geode::Function<void()> original) {
-                                 //      log::info("shine");
-                                 //      original();
-                                 //  })
+                                 .onPlayShineEffect([this](geode::Function<void()> original) {
+                                     int objectId = m_objectID;
+                                     m_objectID = 99;
+                                     original();
+                                     m_objectID = objectId;
+                                 })
                                  .build()) {}
 
     static void setPlayerSize(PlayerObject* player, float s);
 
     void activatedByPlayer(PlayerObject* player) override;
-
-    void playShineEffect();
 
     void postPlayLayerInit() override;
 

@@ -88,11 +88,6 @@ void BigPortal::activatedByPlayer(PlayerObject* player) {
     // TODO prevent pink lightning
     EffectGameObject::activatedByPlayer(player);
 
-    // player->m_lastActivatedPortal = this;
-    // player->m_lastPortalPos = getPosition();
-
-    // playShineEffect();
-
     if (player->m_vehicleSize == PLAYER_SIZE) {
         return;
     }
@@ -111,13 +106,6 @@ void BigPortal::activatedByPlayer(PlayerObject* player) {
     } else {
         player->updatePlayerScale();
     }
-}
-
-void BigPortal::playShineEffect() {
-    int objectId = m_objectID;
-    m_objectID = 99;
-    EffectGameObject::playShineEffect();
-    m_objectID = objectId;
 }
 
 void BigPortal::postPlayLayerInit() {
