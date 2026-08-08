@@ -11,7 +11,8 @@ $on_mod(Loaded) {
         ObjectInfo::builder()
             .id(BigPortal::STRING_ID)
             .sprite(BigPortal::FRAME_FRONT)
-            .editorTab(EditorTab::Modifiers)
+            .editorTab(EditorTab::PlayerModifiers)
+            .editorButtonColor(EditorButtonColor::DarkGray)
             .construction(ComplexObject::builder().factory(BigPortal::create).build())
             .editSpecial(BigPortal::getEditSpecialConfig)
             .build());
