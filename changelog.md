@@ -1,6 +1,7 @@
 # 0.2.2
 
 - Improved performance when touching size portals
+- Jumping in cube now rotates at a slower rate
 
 
 # 0.2.1

@@ -21,9 +21,35 @@ class $modify(MyPlayerObject, PlayerObject) {
         }
     }
 
+    // ------------------------------
+
     bool isBig(float s) { return s > 1.f; }
 
     bool isBig() { return isBig(m_vehicleSize); }
+
+    // ------------------------------
+
+    void runNormalRotation(bool notNormalMode, float speed) {
+        if (!isBig()) {
+            PlayerObject::runNormalRotation(notNormalMode, speed);
+            return;
+        }
+
+        if (notNormalMode ||
+            // is cube
+            (!m_isShip && !m_isBird && !m_isDart && !m_isSwing && !m_isRobot && !m_isSpider &&
+             !m_isDashing &&
+             // has xv
+             (!m_isPlatformer || m_holdingLeft || m_holdingRight || m_platformerMovingLeft ||
+              m_platformerMovingRight))) {
+            // CHANGED - cube rotation speed
+            // normal = 13/30, mini = 10/30, big = 16/30
+            const float rotationDiv = 0.533f;
+            m_isRotating = true;
+            m_rotationSpeed = 180 * flipMod() * (m_isGoingLeft ? -1 : 1) * (m_isSideways ? -1 : 1) *
+                              m_gravityMod * speed / rotationDiv;
+        }
+    }
 
     void loadFromCheckpoint(PlayerCheckpoint* object) {
         PlayerObject::loadFromCheckpoint(object);
@@ -141,7 +167,7 @@ class $modify(MyPlayerObject, PlayerObject) {
             } else {
                 vel = -15.f * (m_isSpider ? 1.1f : 1.f);
             }
-            setYVelocity(vel * (m_isUpsideDown ? -1 : 1), 0);
+            setYVelocity(vel * flipMod(), 0);
 
             if (m_isBall) {
                 runBallRotation2();
@@ -229,7 +255,7 @@ class $modify(MyPlayerObject, PlayerObject) {
                 ringJumpFlipGravity(object, hasNoEffects);
             }
 
-            int sign = m_isUpsideDown ? -1 : 1;
+            int sign = flipMod();
             setYVelocity(sign * jumpVel * sizeScale, 0);
 
             if (m_isBall) {
@@ -422,7 +448,7 @@ class $modify(MyPlayerObject, PlayerObject) {
 
             // i see why we can't have wave in platformer 😔
             const double speed = m_playerSpeed * m_speedMultiplier;
-            const int sign = (m_isUpsideDown ? -1 : 1) * (m_jumpBuffered ? 1 : -1);
+            const int sign = flipMod() * (m_jumpBuffered ? 1 : -1);
 
             // CHANGED wave velocity
             // 0x = same as mini wave
@@ -465,7 +491,7 @@ class $modify(MyPlayerObject, PlayerObject) {
         // const float sizeScale = m_vehicleSize == 1.f ? 1.f : .8f;
         const float sizeScale = 1.2f;
 
-        int sign = m_isUpsideDown ? -1 : 1;
+        int sign = flipMod();
 
         // FLYING
         if (m_isShip || m_isBird || m_isDart || m_isSwing) {
@@ -499,7 +525,7 @@ class $modify(MyPlayerObject, PlayerObject) {
                     m_stateRingJump = false;
                     double oldVel = m_yVelocity;
                     flipGravity(!m_isUpsideDown, true);
-                    sign = m_isUpsideDown ? -1 : 1;
+                    sign = flipMod();
                     setYVelocity(oldVel * .8, 0);
 
                     if (m_gameLayer) {
