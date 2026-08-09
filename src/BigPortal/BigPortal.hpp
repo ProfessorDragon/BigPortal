@@ -28,7 +28,7 @@ class $object(BigPortal, EffectGameObject) {
                                  .gameObjectType(GameObjectType::MiniSizePortal)
                                  .defaultMainColorID(0)
                                  .defaultZLayer(ZLayer::T1)
-                                 .onPlayShineEffect([this](geode::Function<void()> original) {
+                                 .onPlayShineEffect([this](Function<void()> original) {
                                      ObjectIDSwap swap(this, 99);
                                      original();
                                  })
