@@ -1,5 +1,6 @@
 # 0.2.3
 
+- Updated logo
 - Fixed a potential crash when spawning particles in low detail mode
 
 
