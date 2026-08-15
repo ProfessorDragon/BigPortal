@@ -48,12 +48,13 @@ void BigPortal::postPlayLayerInit() {
     createBackFrame(FRAME_BACK, CCPoint{});
 
     if (!m_hasNoParticles) {
-        auto particles = createAndAddParticle(6, "portalEffect08.plist", 4,
-                                              tCCPositionType::kCCPositionTypeGrouped);
-        particles->setStartColor(ccc4FFromccc3B(BigPortal::EFFECT_COLOR));
-        particles->setStartColorVar(ccc4f(.25f, .25f, 0.f, .5f));
-        particles->setEndColor(ccc4FFromccc3B(BigPortal::EFFECT_COLOR));
-        claimParticle();
+        if (auto particles = createAndAddParticle(6, "portalEffect08.plist", 4,
+                                                  tCCPositionType::kCCPositionTypeGrouped)) {
+            particles->setStartColor(ccc4FFromccc3B(BigPortal::EFFECT_COLOR));
+            particles->setStartColorVar(ccc4f(.25f, .25f, 0.f, .5f));
+            particles->setEndColor(ccc4FFromccc3B(BigPortal::EFFECT_COLOR));
+            claimParticle();
+        }
     }
 }
 

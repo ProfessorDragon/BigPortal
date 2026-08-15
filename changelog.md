@@ -1,3 +1,8 @@
+# 0.2.3
+
+- Fixed a potential crash when spawning particles in low detail mode
+
+
 # 0.2.2
 
 - Improved performance when touching size portals
