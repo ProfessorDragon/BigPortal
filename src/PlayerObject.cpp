@@ -289,14 +289,9 @@ class $modify(MyPlayerObject, PlayerObject) {
             if (m_isRobot) {
                 m_robotSprite->runAnimation("jump_start");
             } else if (m_isSpider) {
-                auto sprite = m_spiderSprite;
-                sprite->m_paSprite->stopAllActions();
-                sprite->stopActionByTag(1);
-                sprite->m_animationManager->overridePrio();
-                if (sprite->m_animationManager->m_sprite->m_paSprite)
-                    sprite->m_animationManager->m_sprite->m_paSprite->stopAllActions();
-                if (sprite->m_animationManager->m_sprite->m_fbfSprite)
-                    sprite->m_animationManager->m_sprite->m_fbfSprite->stopAllActions();
+                m_spiderSprite->m_paSprite->stopAllActions();
+                m_spiderSprite->stopActionByTag(1);
+                m_spiderSprite->m_animationManager->stopAllAnimations();
                 m_spiderSprite->tweenToAnimation("jump", .06f);
             }
 
