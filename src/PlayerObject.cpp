@@ -291,7 +291,7 @@ class $modify(MyPlayerObject, PlayerObject) {
             } else if (m_isSpider) {
                 m_spiderSprite->m_paSprite->stopAllActions();
                 m_spiderSprite->stopActionByTag(1);
-                m_spiderSprite->m_animationManager->stopAllAnimations();
+                m_spiderSprite->m_animationManager->stopAnimations();
                 m_spiderSprite->tweenToAnimation("jump", .06f);
             }
 
